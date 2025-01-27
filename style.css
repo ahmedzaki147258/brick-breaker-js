@@ -1,0 +1,11 @@
+body {
+    background-image: url('./assets/mainmenu.png');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+}
+
+audio {
+    display: none;
+}
