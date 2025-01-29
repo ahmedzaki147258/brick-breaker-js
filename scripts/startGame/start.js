@@ -1,0 +1,9 @@
+import { animate } from "./inimate.js";
+import { lives } from "./lives.js";
+import { live } from "./dead.js";
+export function start() {
+
+    lives(live);
+    animate();
+
+}

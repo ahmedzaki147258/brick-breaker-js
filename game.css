@@ -1,0 +1,27 @@
+.lives-container {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    display: flex;
+    gap: 10px;
+}
+
+.img-container {
+    width: 50px;
+    height: 50px;
+}
+
+#myCanvas {
+    border: 1px solid black;
+    display: block;
+    margin: 0 auto;
+    background-color: #f0f0f0;
+}
+
+body {
+    background-color: cadetblue;
+
+
+
+}
