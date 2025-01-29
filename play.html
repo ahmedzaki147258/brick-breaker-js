@@ -1,42 +1,21 @@
-<html lang="ar">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="./game.css" />
+    <title>Brick Breaker</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
-  <link rel="stylesheet" type="text/css" href="./game.css">
-</head>
-
-<body>
-  <div id="started">
-    <h2>Choose Game Difficulty</h2>
-    <button class="dif" data-difficulty="easy">Easy</button>
-    <button class="dif" data-difficulty="medium">Medium</button>
-    <button class="dif" data-difficulty="hard">Hard</button>
-    <button id="startGame">Start Game</button>
-  </div>
-  <script type="module">
-    import { start } from "./scripts/startGame/start.js"
-    import { setDifficulty } from "./scripts/startGame/setDiffculty.js"
-    import { startPage } from "./scripts/startGame/startedPage.js"
-
-    let selectedDifficulty = "easy";
-
-    const difficultyButtons = document.querySelectorAll(".dif");
-
-    difficultyButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        selectedDifficulty = button.getAttribute("data-difficulty");
-        console.log("Selected difficulty:", selectedDifficulty);
-      });
-    });
-    document.getElementById("startGame").addEventListener("click", () => {
-      setDifficulty(selectedDifficulty);
-      startPage()
-      start();
-    });
-  </script>
-
-</body>
-
+  <body>
+    <div id="started">
+      <h2>Choose Game Difficulty</h2>
+      <button class="dif" data-difficulty="easy">Easy</button>
+      <button class="dif" data-difficulty="medium">Medium</button>
+      <button class="dif" data-difficulty="hard">Hard</button>
+      <button id="startGame">Start Game</button>
+    </div>
+    
+    <script type="module" src="./play.js"></script>     
+  </body>
 </html>

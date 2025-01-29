@@ -1,16 +1,15 @@
-
-import { ball as balll } from "./inimate.js"
+import { ball } from "./animate.js";
 
 export function setDifficulty(level) {
-    let difficulty = level;
-    if (difficulty === 'easy') {
-        balll.speedX = 1;
-        balll.speedY = 1;
-    } else if (difficulty === 'medium') {
-        balll.speedX = 2;
-        balll.speedY = 2;
-    } else if (difficulty === 'hard') {
-        balll.speedX = 3;
-        balll.speedY = 3;
+    ball.moving = false;
+    if (level === 'easy') {
+        ball.speedX = 4;
+        ball.speedY = 4;
+    } else if (level === 'medium') {
+        ball.speedX = 5;
+        ball.speedY = 5;
+    } else if (level === 'hard') {
+        ball.speedX = 6;
+        ball.speedY = 6;
     }
 }
