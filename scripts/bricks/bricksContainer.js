@@ -28,6 +28,7 @@ export class BricksContainer {
 
     generateBricks() {
         this.bricks = [];
+        this.brickPaths = new Map();
         for (let row = 0; row < this.rows; row++) {
             const brickRow = [];
             for (let col = 0; col < this.cols; col++) {
@@ -54,15 +55,22 @@ export class BricksContainer {
                 );
             }
             this.bricks.push(brickRow);
+            this.bricks.forEach((row, rowIndex) => {
+                row.forEach((brick, colIndex) => {
+                    const path = new Path2D();
+                    path.rect(brick.x, brick.y, brick.width, brick.height);
+                    this.brickPaths.set(`${rowIndex}-${colIndex}`, path);
+                });
+            });
         }
     }
 
     draw(ctx) {
-        this.bricks.forEach((row) => {
-            row.forEach((brick) => {
+        this.bricks.forEach((row, rowIndex) => {
+            row.forEach((brick, colIndex) => {
                 if (brick.visible) {
                     ctx.fillStyle = this.getBrickColor(brick);
-                    ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+                    ctx.fill(this.brickPaths.get(`${rowIndex}-${colIndex}`));
                 }
             });
         });
@@ -74,8 +82,26 @@ export class BricksContainer {
     }
 
     checkCollision(ball) {
-        for (const row of this.bricks) {
-            for (const brick of row) {
+        const gridX = Math.floor(
+            (ball.x - BricksContainer.OFFSET_X) /
+                (BricksContainer.BRICK_WIDTH + BricksContainer.PADDING)
+        );
+        const gridY = Math.floor(
+            (ball.y - BricksContainer.OFFSET_Y) /
+                (BricksContainer.BRICK_HEIGHT + BricksContainer.PADDING)
+        );
+
+        for (
+            let y = Math.max(0, gridY - 1);
+            y <= Math.min(this.rows - 1, gridY + 1);
+            y++
+        ) {
+            for (
+                let x = Math.max(0, gridX - 1);
+                x <= Math.min(this.cols - 1, gridX + 1);
+                x++
+            ) {
+                const brick = this.bricks[y][x];
                 if (brick.visible && this.isColliding(ball, brick)) {
                     this.handleCollision(ball, brick);
                     return true;
@@ -96,7 +122,15 @@ export class BricksContainer {
 
     handleCollision(ball, brick) {
         brick.hit();
-        ball.speedY *= -1;
+
+        const overlapX = ball.x - brick.x - brick.width / 2;
+        const overlapY = ball.y - brick.y - brick.height / 2;
+
+        if (Math.abs(overlapX) > Math.abs(overlapY)) {
+            ball.speedX *= -1;
+        } else {
+            ball.speedY *= -1;
+        }
     }
 
     reset() {
