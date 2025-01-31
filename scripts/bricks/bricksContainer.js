@@ -1,4 +1,4 @@
-import { Brick } from "./brick";
+import { Brick } from "./brick.js";
 export class BricksContainer {
     static BRICK_WIDTH = 70;
     static BRICK_HEIGHT = 40;

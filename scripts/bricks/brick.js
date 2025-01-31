@@ -11,7 +11,7 @@ export class Brick {
 
     hit() {
         if (this.isBreakable && this.visible) {
-            this.lives = max(0, this.lives - 1);
+            this.lives = Math.max(0, this.lives - 1);
             if (this.lives === 0) {
                 this.visible = false;
             }
