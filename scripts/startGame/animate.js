@@ -27,15 +27,14 @@ export function animate(bricks) {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    console.log(bricks);
     bricks.draw(ctx);
 
     if (!ball.moving) {
         placeBallOnPaddle();
     } else {
-        ball.x += ball.speedX;
-        ball.y += ball.speedY;
-
+        if (bricks.checkCollision(ball)) {
+            // add reward
+        }
         // collision with wall
         if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
             ball.speedX = -ball.speedX;
@@ -59,9 +58,8 @@ export function animate(bricks) {
             ball.moving = false;
             placeBallOnPaddle();
         }
-        if (bricks.checkCollision(ball)) {
-            // add reward
-        }
+        ball.x += ball.speedX;
+        ball.y += ball.speedY;
     }
 
     // draw ball
