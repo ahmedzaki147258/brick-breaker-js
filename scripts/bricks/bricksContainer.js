@@ -3,14 +3,14 @@ export class BricksContainer {
     static BRICK_WIDTH = 70;
     static BRICK_HEIGHT = 40;
     static PADDING = 5;
-    static OFFSET_X = 25;
-    static OFFSET_Y = 30;
+    static OFFSET_X = 35;
+    static OFFSET_Y = 20;
 
     constructor(difficulty = "medium") {
         this.difficultySettings = {
-            easy: { rows: 4, cols: 8, unbreakableRatio: 0.1 },
-            medium: { rows: 6, cols: 10, unbreakableRatio: 0.3 },
-            hard: { rows: 8, cols: 12, unbreakableRatio: 0.5 },
+            easy: { rows: 3, cols: 10, pattern: "sparse" },
+            medium: { rows: 5, cols: 10, pattern: "vertical" },
+            hard: { rows: 7, cols: 10, pattern: "zegzag" },
         };
 
         this.setDifficulty(difficulty);
@@ -23,16 +23,18 @@ export class BricksContainer {
             this.difficultySettings.medium;
         this.rows = settings.rows;
         this.cols = settings.cols;
-        this.unbreakableRatio = settings.unbreakableRatio;
+        this.pattern = settings.pattern;
     }
 
     generateBricks() {
         this.bricks = [];
         this.brickPaths = new Map();
+
         for (let row = 0; row < this.rows; row++) {
             const brickRow = [];
             for (let col = 0; col < this.cols; col++) {
-                const isBreakable = Math.random() > this.unbreakableRatio;
+                let isBreakable = this.shouldBeBreakable(row, col);
+
                 const x =
                     col *
                         (BricksContainer.BRICK_WIDTH +
@@ -55,14 +57,38 @@ export class BricksContainer {
                 );
             }
             this.bricks.push(brickRow);
-            this.bricks.forEach((row, rowIndex) => {
-                row.forEach((brick, colIndex) => {
-                    const path = new Path2D();
-                    path.rect(brick.x, brick.y, brick.width, brick.height);
-                    this.brickPaths.set(`${rowIndex}-${colIndex}`, path);
-                });
-            });
         }
+
+        this.createPath2DObjects();
+    }
+
+    shouldBeBreakable(row, col) {
+        if (row === this.rows - 1) return true;
+
+        switch (this.pattern) {
+            case "sparse":
+                return row !== 0 || col % 4 !== 0;
+
+            case "vertical":
+                return col % 3 !== 0;
+
+            case "zegzag":
+                return (row + col) % (this.rows > 6 ? 3 : 4) !== 0;
+
+            default:
+                return true;
+        }
+    }
+
+    createPath2DObjects() {
+        this.brickPaths.clear();
+        this.bricks.forEach((row, rowIndex) => {
+            row.forEach((brick, colIndex) => {
+                const path = new Path2D();
+                path.rect(brick.x, brick.y, brick.width, brick.height);
+                this.brickPaths.set(`${rowIndex}-${colIndex}`, path);
+            });
+        });
     }
 
     draw(ctx) {
@@ -112,24 +138,53 @@ export class BricksContainer {
     }
 
     isColliding(ball, brick) {
-        return (
-            ball.x + ball.radius > brick.x &&
-            ball.x - ball.radius < brick.x + brick.width &&
-            ball.y + ball.radius > brick.y &&
-            ball.y - ball.radius < brick.y + brick.height
+        const closestX = Math.max(
+            brick.x,
+            Math.min(ball.x, brick.x + brick.width)
         );
+        const closestY = Math.max(
+            brick.y,
+            Math.min(ball.y, brick.y + brick.height)
+        );
+        const dx = ball.x - closestX;
+        const dy = ball.y - closestY;
+        return dx * dx + dy * dy < ball.radius * ball.radius;
     }
 
     handleCollision(ball, brick) {
         brick.hit();
 
-        const overlapX = ball.x - brick.x - brick.width / 2;
-        const overlapY = ball.y - brick.y - brick.height / 2;
+        const closestX = Math.max(
+            brick.x,
+            Math.min(ball.x, brick.x + brick.width)
+        );
+        const closestY = Math.max(
+            brick.y,
+            Math.min(ball.y, brick.y + brick.height)
+        );
+        const dx = ball.x - closestX;
+        const dy = ball.y - closestY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (Math.abs(overlapX) > Math.abs(overlapY)) {
+        if (distance === 0) return;
+
+        const nx = dx / distance;
+        const ny = dy / distance;
+        const absNX = Math.abs(nx);
+        const absNY = Math.abs(ny);
+
+        if (absNX > absNY) {
             ball.speedX *= -1;
+            ball.x +=
+                nx > 0
+                    ? brick.x + brick.width + ball.radius - ball.x
+                    : brick.x - ball.radius - ball.x;
         } else {
             ball.speedY *= -1;
+            ball.y +=
+                ny > 0
+                    ? brick.y + brick.height + ball.radius - ball.y
+                    : brick.y - ball.radius - ball.y;
         }
     }
 

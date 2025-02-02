@@ -1,4 +1,4 @@
-import { Dead } from "./dead.js";
+import { Dead, live } from "./dead.js";
 import { paddle } from "./paddle.js";
 
 export var ball = {
@@ -54,9 +54,15 @@ export function animate(bricks) {
 
         // if the ball hits the top of the canvas
         if (ball.y + ball.radius > canvas.height) {
-            Dead();
-            ball.moving = false;
-            placeBallOnPaddle();
+            if (live == 0) {
+                Dead()
+                return
+            }
+            else {
+                Dead();
+                ball.moving = false;
+                placeBallOnPaddle();
+            }
         }
         ball.x += ball.speedX;
         ball.y += ball.speedY;
