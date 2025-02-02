@@ -10,7 +10,7 @@ export class BricksContainer {
         this.difficultySettings = {
             easy: { rows: 3, cols: 10, pattern: "sparse" },
             medium: { rows: 5, cols: 10, pattern: "vertical" },
-            hard: { rows: 7, cols: 10, pattern: "checkerboard" },
+            hard: { rows: 7, cols: 10, pattern: "zegzag" },
         };
 
         this.setDifficulty(difficulty);
@@ -72,7 +72,7 @@ export class BricksContainer {
             case "vertical":
                 return col % 3 !== 0;
 
-            case "checkerboard":
+            case "zegzag":
                 return (row + col) % (this.rows > 6 ? 3 : 4) !== 0;
 
             default:
