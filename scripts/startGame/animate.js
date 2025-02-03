@@ -1,5 +1,6 @@
 import { Dead, live } from "./dead.js";
 import { paddle } from "./paddle.js";
+import { lifeIcons } from "./lifeicon.js";
 
 export var ball = {
     x: 600 / 2,
@@ -28,6 +29,9 @@ export function animate(bricks) {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     bricks.draw(ctx);
+    lifeIcons.forEach((icon) => {
+        icon.draw(ctx);
+    });
 
     if (!ball.moving) {
         placeBallOnPaddle();
@@ -35,6 +39,9 @@ export function animate(bricks) {
         if (bricks.checkCollision(ball)) {
             // add reward
         }
+        lifeIcons.forEach((icon) => icon.checkCollision(paddle));
+        lifeIcons.forEach((icon) => icon.update());
+
         // collision with wall
         if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
             ball.speedX = -ball.speedX;
@@ -55,10 +62,9 @@ export function animate(bricks) {
         // if the ball hits the top of the canvas
         if (ball.y + ball.radius > canvas.height) {
             if (live == 0) {
-                Dead()
-                return
-            }
-            else {
+                Dead();
+                return;
+            } else {
                 Dead();
                 ball.moving = false;
                 placeBallOnPaddle();

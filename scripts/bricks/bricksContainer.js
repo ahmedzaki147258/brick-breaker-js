@@ -8,9 +8,14 @@ export class BricksContainer {
 
     constructor(difficulty = "medium") {
         this.difficultySettings = {
-            easy: { rows: 3, cols: 10, pattern: "sparse" },
-            medium: { rows: 5, cols: 10, pattern: "vertical" },
-            hard: { rows: 7, cols: 10, pattern: "zegzag" },
+            easy: { rows: 3, cols: 10, pattern: "sparse", lifeDropRate: 0.4 },
+            medium: {
+                rows: 5,
+                cols: 10,
+                pattern: "vertical",
+                lifeDropRate: 0.3,
+            },
+            hard: { rows: 7, cols: 10, pattern: "zegzag", lifeDropRate: 0.2 },
         };
 
         this.setDifficulty(difficulty);
@@ -24,6 +29,7 @@ export class BricksContainer {
         this.rows = settings.rows;
         this.cols = settings.cols;
         this.pattern = settings.pattern;
+        this.lifeDropRate = settings.lifeDropRate;
     }
 
     generateBricks() {
@@ -152,7 +158,7 @@ export class BricksContainer {
     }
 
     handleCollision(ball, brick) {
-        brick.hit();
+        brick.hit(this.lifeDropRate);
 
         const closestX = Math.max(
             brick.x,
@@ -186,6 +192,17 @@ export class BricksContainer {
                     ? brick.y + brick.height + ball.radius - ball.y
                     : brick.y - ball.radius - ball.y;
         }
+    }
+
+    areAllBricksBroken() {
+        for (let row of this.bricks) {
+            for (let brick of row) {
+                if (brick.visible && brick.isBreakable) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     reset() {

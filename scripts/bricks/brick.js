@@ -1,3 +1,5 @@
+import { dropLifeIcon } from "../startGame/lifeicon.js";
+
 export class Brick {
     constructor(x, y, width, height, isBreakable) {
         this.x = x;
@@ -9,12 +11,15 @@ export class Brick {
         this.visible = true;
     }
 
-    hit() {
+    hit(lifeDropRate = 0.2) {
         if (this.isBreakable && this.visible) {
             setTimeout(() => {
                 this.lives = Math.max(0, this.lives - 1);
                 if (this.lives === 0) {
                     this.visible = false;
+                    if (Math.random() < lifeDropRate) {
+                        dropLifeIcon(this.x, this.y);
+                    }
                 }
             }, 1);
         }

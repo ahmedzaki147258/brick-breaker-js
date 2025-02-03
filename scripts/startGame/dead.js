@@ -3,16 +3,21 @@ import { startPage } from "./startedPage.js";
 import { endGame } from "./end.js";
 import { gameResult } from "./Score.js";
 
-export let live = 3
+export let live = 3;
 
 export function Dead() {
-
     if (live == 0) {
         startPage();
-        endGame()
+        endGame();
         gameResult();
     }
-    live--
+    live--;
     lives(live);
 }
 
+export function revive() {
+    if (live < 3) {
+        live++;
+        lives(live);
+    }
+}
