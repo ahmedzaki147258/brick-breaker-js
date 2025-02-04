@@ -1,6 +1,6 @@
 
 
-export function gameResult() {
+export function gameResult(state) {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
     const grad = ctx.createLinearGradient(0, 0, 950, 0);
@@ -8,5 +8,5 @@ export function gameResult() {
     grad.addColorStop(1, "darkblue");
     ctx.font = "50px Arial bold";
     ctx.fillStyle = grad;
-    ctx.fillText("Game Over", 280, 300);
+    ctx.fillText(state ? "Congratulations" : "Game Over", 280, 300);
 }

@@ -1,6 +1,9 @@
 import { Dead, live } from "./dead.js";
 import { paddle } from "./paddle.js";
 import { lifeIcons } from "./lifeicon.js";
+import { gameResult } from "./Score.js";
+import { endGame } from "./end.js";
+import { startPage } from "./startedPage.js"
 
 export var ball = {
     x: 600 / 2,
@@ -36,8 +39,13 @@ export function animate(bricks) {
     if (!ball.moving) {
         placeBallOnPaddle();
     } else {
-        if (bricks.checkCollision(ball)) {
-            // add reward
+        bricks.checkCollision(ball);
+
+        if (bricks.areAllBricksBroken()) {
+            startPage();
+            endGame();
+            gameResult(true);
+            return;
         }
         lifeIcons.forEach((icon) => icon.checkCollision(paddle));
         lifeIcons.forEach((icon) => icon.update());
@@ -61,6 +69,7 @@ export function animate(bricks) {
 
         // if the ball hits the top of the canvas
         if (ball.y + ball.radius > canvas.height) {
+            // lifeIcons = [];
             if (live == 0) {
                 Dead();
                 return;
