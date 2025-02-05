@@ -1,7 +1,5 @@
 export function lives(lives) {
-  let src =
-    "https://www.shutterstock.com/image-vector/pixel-heart-icon-8-bit-260nw-2145047623.jpg";
-
+  let src = "../../assets/heart.png";
   let livesContainer = document.querySelector(".lives-container");
   if (!livesContainer) {
     livesContainer = document.createElement("div");
