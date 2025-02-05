@@ -4,7 +4,7 @@ export class BricksContainer {
   static BRICK_HEIGHT = 40;
   static PADDING = 5;
   static OFFSET_X = 35;
-  static OFFSET_Y = 20;
+  static OFFSET_Y = 35;
 
   constructor(difficulty = "medium") {
     this.difficultySettings = {
