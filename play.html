@@ -6,16 +6,16 @@
     <link rel="stylesheet" type="text/css" href="./game.css" />
     <title>Brick Breaker</title>
   </head>
-
   <body>
     <div id="started">
       <h2>Choose Game Difficulty</h2>
-      <button class="dif" data-difficulty="easy">Easy</button>
-      <button class="dif" data-difficulty="medium">Medium</button>
-      <button class="dif" data-difficulty="hard">Hard</button>
+      <div class="difficulty-container">
+        <button class="dif" data-difficulty="easy">Easy</button>
+        <button class="dif" data-difficulty="medium">Medium</button>
+        <button class="dif" data-difficulty="hard">Hard</button>
+      </div>
       <button id="startGame">Start Game</button>
     </div>
-    
-    <script type="module" src="./play.js"></script>     
+    <script type="module" src="./play.js"></script>
   </body>
 </html>

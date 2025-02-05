@@ -1,7 +1,12 @@
 import { lives } from "./lives.js";
+import { startPage } from "./startedPage.js";
+import { endGame } from "./end.js";
+import { gameResult } from "./Score.js";
 
 export let live = 3;
+
 export function Dead() {
+<<<<<<< HEAD
   if (live === 1) {
     alert("Game Over");
     live = 3;
@@ -12,6 +17,21 @@ export function Dead() {
     if (canvas) {
       canvas.removeEventListener("mousedown", null);
       canvas.remove();
+=======
+    if (live == 0) {
+        startPage();
+        endGame();
+        gameResult();
+    }
+    live--;
+    lives(live);
+}
+
+export function revive() {
+    if (live < 3) {
+        live++;
+        lives(live);
+>>>>>>> testing
     }
 
     // Remove lives container and hearts
