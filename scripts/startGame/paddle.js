@@ -12,15 +12,32 @@ export function initPaddle(canvas) {
     paddle.y = canvas.height - 50;
 }
 
-export function movePaddle(event, canvas) {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    
-    paddle.x = mouseX - paddle.width / 2;
-    
-    if (paddle.x < 0) {
-        paddle.x = 0;
-    } else if (paddle.x + paddle.width > canvas.width) {
-        paddle.x = canvas.width - paddle.width;
+let lives = 3;  
+let score = 0;  
+let paddle; 
+let ball;  
+//let bricks = []; 
+let lifeIcons = [];  
+//let unbreakableBricks = [];  
+
+// the first game setup    
+/*function setup() {
+//  Create paddle and ball and bricks
+  paddle = new Paddle();
+  ball = new Ball();
+  bricks = createBricks();
+}*/
+
+// createnbricks
+/*function createBricks() {
+  let brickArray = [];
+  // create 5 rows and 10 col 
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 10; j++) {
+      let isUnbreakable = Math.random() < 0.2;  // 20% from bricks cant break 
+      brickArray.push(new Brick(j * 60, i * 20, isUnbreakable));
     }
-}
+  }
+  return brickArray;
+}*/
+

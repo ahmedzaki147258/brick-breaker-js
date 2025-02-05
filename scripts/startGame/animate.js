@@ -11,17 +11,29 @@ export var ball = {
     moving: false,
 };
 
-export function placeBallOnPaddle() {
-    ball.x = paddle.x + paddle.width / 2;
-    ball.y = paddle.y - ball.radius;
-}
-
-export function startBallMovement() {
-    if (!ball.moving) {
-        ball.moving = true;
-        ball.speedY = -Math.abs(ball.speedY); // go ball to up
+hit() {
+    if (this.isUnbreakable) return;  // dont make anything for bricks if isunbreakable 
+    this.hitCount++;
+    if (this.hitCount >= 2) {
+      // call remove function
+      this.remove();
+      // after brack 5 bricks droplife icon 
+      if ( (score + 10 ) % 50 === 0) {
+        dropLifeIcon(this.x, this.y);
+      }
     }
-}
+  }
+
+  // remove bricks
+  remove() {
+    // remove bricks from array
+    const index = bricks.indexOf(this);
+    if (index > -1) {
+      bricks.splice(index, 1);
+      score += 10;  // after breck one of brick increase score to 10 point 
+    }
+  }
+}*/
 
 export function animate(bricks) {
     const canvas = document.getElementById("myCanvas");
