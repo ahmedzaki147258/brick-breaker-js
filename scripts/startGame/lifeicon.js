@@ -1,46 +1,45 @@
 import { revive } from "./dead.js";
 export let score = 0;
 export let lifeIcons = [];
+function dropLifeIcon(x, y) {
+  let lifeIcon = new LifeIcon(x, y);
+  lifeIcons.push(lifeIcon);
+}
 
+class LifeIcon {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.speedY = 2;
+  }
+  
+  update() {
+    this.y += this.speedY; // moveing icon to bootom
+  }
+
+  // sure the icon crush with paddle 
+  checkCollision() {
+    if (
+      paddle.x < this.x + 20 && paddle.x + paddle.width > this.x &&
+      paddle.y < this.y + 20 && paddle.y + paddle.height > this.y
+    ) {
+      
+      lives++;
+      lifeIcons = lifeIcons.filter(icon => icon !== this);  
+    }
+  }
+
+  draw() {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(this.x, this.y, 20, 20);
+  }
+}
 
 export function dropLifeIcon(x, y) {
   let lifeIcon = new LifeIcon(x, y);
   lifeIcons.push(lifeIcon);
 }
 
-export class LifeIcon {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.speedY = 2;
-    this.size = 24; 
-    this.glowIntensity = 0;
-    this.glowIncreasing = true;
-  }
-
-  update() {
-    this.y += this.speedY;
-
-    if (this.glowIncreasing) {
-      this.glowIntensity += 0.1;
-      if (this.glowIntensity >= 1) this.glowIncreasing = false;
-    } else {
-      this.glowIntensity -= 0.1;
-      if (this.glowIntensity <= 0) this.glowIncreasing = true;
-    }
-  }
-
-  checkCollision(paddle) {
-    if (
-      paddle.x < this.x + this.size &&
-      paddle.x + paddle.width > this.x &&
-      paddle.y < this.y + this.size &&
-      paddle.y + paddle.height > this.y
-    ) {
-      revive();
-      lifeIcons = lifeIcons.filter((icon) => icon !== this);
-    }
-  }
 
   draw(ctx) {
     ctx.save();

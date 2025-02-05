@@ -14,18 +14,36 @@ export function initPaddle(canvas) {
   paddle.y = canvas.height - 50;
 }
 
-export function movePaddle(event, canvas) {
-  const rect = canvas.getBoundingClientRect();
-  const mouseX = event.clientX - rect.left;
-
-  paddle.x = mouseX - paddle.width / 2;
-
-  if (paddle.x < 0) {
-    paddle.x = 0;
-  } else if (paddle.x + paddle.width > canvas.width) {
-    paddle.x = canvas.width - paddle.width;
+/*function hitBricks() {
+  for (let i = 0; i < bricks.length; i++) {
+    if (ball.collidesWith(bricks[i])) {
+      bricks[i].hit();
+    }
   }
+}*/
+
+function gameLoop() {
+
+  ball.move();
+  paddle.move();
+
+  //call to Ceack from crush ball with bricks 
+  hitBricks();
+
+  // cheack from crush icon with paddle 
+  for (let icon of lifeIcons) {
+    icon.checkCollision();
+  }
+
+  // update screen
+  draw();
+  requestAnimationFrame(gameLoop);
 }
+
+// start game
+setup();
+gameLoop();
+
 
 export function drawPaddle(ctx) {
   ctx.save();
