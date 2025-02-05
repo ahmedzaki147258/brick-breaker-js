@@ -90,7 +90,7 @@ export class BricksContainer {
           brick.y,
           BricksContainer.BRICK_WIDTH,
           BricksContainer.BRICK_HEIGHT,
-          8 // Border radius value
+          8 
         );
         this.brickPaths.set(`${rowIndex}-${colIndex}`, path);
       });

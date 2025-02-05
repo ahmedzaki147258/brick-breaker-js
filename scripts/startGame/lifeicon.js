@@ -2,7 +2,7 @@ import { revive } from "./dead.js";
 export let score = 0;
 export let lifeIcons = [];
 
-// drop lifeicon
+
 export function dropLifeIcon(x, y) {
   let lifeIcon = new LifeIcon(x, y);
   lifeIcons.push(lifeIcon);
@@ -13,7 +13,7 @@ export class LifeIcon {
     this.x = x;
     this.y = y;
     this.speedY = 2;
-    this.size = 24; // Increased size for better visibility
+    this.size = 24; 
     this.glowIntensity = 0;
     this.glowIncreasing = true;
   }
@@ -21,7 +21,6 @@ export class LifeIcon {
   update() {
     this.y += this.speedY;
 
-    // Pulsing glow effect
     if (this.glowIncreasing) {
       this.glowIntensity += 0.1;
       if (this.glowIntensity >= 1) this.glowIncreasing = false;
@@ -46,23 +45,23 @@ export class LifeIcon {
   draw(ctx) {
     ctx.save();
 
-    // Glowing effect
+
     ctx.shadowColor = "rgba(255, 0, 0, " + this.glowIntensity + ")";
     ctx.shadowBlur = 15;
 
-    // Heart shape drawing
+ 
     const heartPath = new Path2D();
     const x = this.x;
     const y = this.y;
     const size = this.size;
 
-    // Move to top center of heart
+   
     heartPath.moveTo(x + size / 2, y + size / 3);
 
-    // Left curve
+   
     heartPath.bezierCurveTo(x + size / 2, y, x, y, x, y + size / 3);
 
-    // Left bottom curve
+  
     heartPath.bezierCurveTo(
       x,
       y + size / 2,
@@ -72,7 +71,7 @@ export class LifeIcon {
       y + size
     );
 
-    // Right bottom curve
+   
     heartPath.bezierCurveTo(
       x + size / 2,
       y + size,
@@ -82,7 +81,7 @@ export class LifeIcon {
       y + size / 3
     );
 
-    // Right curve
+  
     heartPath.bezierCurveTo(
       x + size,
       y,
@@ -92,7 +91,7 @@ export class LifeIcon {
       y + size / 3
     );
 
-    // Create gradient
+   
     const gradient = ctx.createRadialGradient(
       x + size / 2,
       y + size / 2,
@@ -105,11 +104,11 @@ export class LifeIcon {
     gradient.addColorStop(0.5, "#ff4757");
     gradient.addColorStop(1, "#ff0000");
 
-    // Fill heart with gradient
+   
     ctx.fillStyle = gradient;
     ctx.fill(heartPath);
 
-    // Add shine effect
+   
     ctx.beginPath();
     ctx.ellipse(
       x + size / 4,
