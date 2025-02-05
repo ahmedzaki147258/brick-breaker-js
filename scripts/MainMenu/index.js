@@ -14,7 +14,7 @@ export class MainMenu {
         const menuContainer = document.createElement('div');
         menuContainer.className = 'menu-container';
         
-        // Initialize components
+        
         this.teamDialog = new TeamDialog(() => {});
         this.settingsDialog = new SettingsDialog(this.audioManager, () => {});
         new MenuButtons(menuContainer, (action) => this.navigate(action));
