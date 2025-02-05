@@ -1,37 +1,289 @@
+/* Game container and canvas styles */
 .lives-container {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 100;
-    display: flex;
-    gap: 10px;
-}
-
-.img-container {
-    width: 50px;
-    height: 50px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  display: flex;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 #myCanvas {
-    border: 1px solid black;
-    display: block;
-    margin: 0 auto;
-    background-color: #f0f0f0;
-    text-align: center;
+  border: none;
+  display: block;
+  margin: 0 auto;
+  background-color: rgba(240, 240, 240, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 
-
-body {
-    background-color: cadetblue;
-    text-align: center;
-    padding: 15px;
+/* Game result message styling */
+.game-result-text {
+  font-family: "Segoe UI", Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3),
+    -2px -2px 8px rgba(255, 255, 255, 0.3);
 }
 
+/* End button styling */
 #end-button {
-    padding: 10px;
-    margin: 15px auto;
-    background-color: cadetblue;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
+  position: absolute;
+  left: 50%;
+  top: 80%;
+  transform: translate(-50%, -50%);
+  padding: 20px 50px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 15px;
+  background: linear-gradient(
+    145deg,
+    rgba(33, 150, 243, 0.9),
+    rgba(25, 118, 210, 0.9)
+  );
+  color: white;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  z-index: 10;
+  min-width: 280px;
+}
+
+#end-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+#end-button:hover::before {
+  left: 100%;
+}
+
+#end-button:hover {
+  transform: translate(-50%, -50%) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(
+    145deg,
+    rgba(25, 118, 210, 0.95),
+    rgba(21, 101, 192, 0.95)
+  );
+}
+
+#end-button:active {
+  transform: translate(-50%, -50%) scale(0.98);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Difficulty selection screen */
+#started {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+    url("https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=2070")
+      center/cover no-repeat;
+  position: relative;
+}
+
+#started::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(95, 158, 160, 0.2);
+  pointer-events: none;
+}
+
+h2 {
+  color: white;
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
+  font-weight: 600;
+  letter-spacing: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+.difficulty-container {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.dif {
+  padding: 16px 32px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(230, 230, 230, 0.9)
+  );
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+}
+
+.dif::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.dif:hover::before {
+  left: 100%;
+}
+
+.dif:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.dif:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dif.selected {
+  background: linear-gradient(
+    145deg,
+    rgba(76, 175, 80, 0.9),
+    rgba(69, 160, 73, 0.9)
+  );
+  color: white;
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+}
+
+#startGame {
+  padding: 20px 50px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 15px;
+  background: linear-gradient(
+    145deg,
+    rgba(33, 150, 243, 0.9),
+    rgba(25, 118, 210, 0.9)
+  );
+  color: white;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  z-index: 1;
+  min-width: 280px;
+}
+
+#startGame::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+#startGame:hover::before {
+  left: 100%;
+}
+
+#startGame:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(
+    145deg,
+    rgba(25, 118, 210, 0.95),
+    rgba(21, 101, 192, 0.95)
+  );
+}
+
+#startGame:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 2.2rem;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .difficulty-container {
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .dif {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  #startGame,
+  #end-button {
+    width: 100%;
+    max-width: 280px;
+    padding: 18px 30px;
+    font-size: 1.3rem;
+  }
 }
