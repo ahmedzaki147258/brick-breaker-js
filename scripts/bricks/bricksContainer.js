@@ -35,6 +35,27 @@ export class BricksContainer {
     this.bricks = [];
     this.brickPaths = new Map();
 
+    // Get canvas dimensions to center bricks
+    const canvas = document.getElementById("myCanvas");
+    const canvasWidth = canvas ? canvas.width : 700;
+    const canvasHeight = canvas ? canvas.height : 600;
+
+    // Calculate total width of all bricks
+    const totalBricksWidth = 
+      this.cols * BricksContainer.BRICK_WIDTH + 
+      (this.cols - 1) * BricksContainer.PADDING;
+    
+    // Calculate total height of all bricks
+    const totalBricksHeight = 
+      this.rows * BricksContainer.BRICK_HEIGHT + 
+      (this.rows - 1) * BricksContainer.PADDING;
+
+    // Center bricks horizontally
+    const offsetX = (canvasWidth - totalBricksWidth) / 2;
+    
+    // Position bricks from top with some margin
+    const offsetY = 50;
+
     for (let row = 0; row < this.rows; row++) {
       const brickRow = [];
       for (let col = 0; col < this.cols; col++) {
@@ -42,10 +63,10 @@ export class BricksContainer {
 
         const x =
           col * (BricksContainer.BRICK_WIDTH + BricksContainer.PADDING) +
-          BricksContainer.OFFSET_X;
+          offsetX;
         const y =
           row * (BricksContainer.BRICK_HEIGHT + BricksContainer.PADDING) +
-          BricksContainer.OFFSET_Y;
+          offsetY;
 
         brickRow.push(
           new Brick(
@@ -59,6 +80,10 @@ export class BricksContainer {
       }
       this.bricks.push(brickRow);
     }
+
+    // Store offsets for collision detection
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
 
     this.createPath2DObjects();
   }
@@ -135,11 +160,11 @@ export class BricksContainer {
 
   checkCollision(ball) {
     const gridX = Math.floor(
-      (ball.x - BricksContainer.OFFSET_X) /
+      (ball.x - this.offsetX) /
         (BricksContainer.BRICK_WIDTH + BricksContainer.PADDING)
     );
     const gridY = Math.floor(
-      (ball.y - BricksContainer.OFFSET_Y) /
+      (ball.y - this.offsetY) /
         (BricksContainer.BRICK_HEIGHT + BricksContainer.PADDING)
     );
 

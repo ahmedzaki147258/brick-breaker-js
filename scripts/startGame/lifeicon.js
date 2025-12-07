@@ -38,8 +38,9 @@ export class LifeIcon {
       paddle.y + paddle.height > this.y
     ) {
       revive();
-      lifeIcons = lifeIcons.filter((icon) => icon !== this);
+      return true; // Return true to indicate collision
     }
+    return false;
   }
 
   draw(ctx) {

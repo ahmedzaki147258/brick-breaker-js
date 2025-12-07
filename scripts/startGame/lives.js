@@ -1,5 +1,6 @@
-export function lives(lives) {
-    let src = "https://www.shutterstock.com/image-vector/pixel-heart-icon-8-bit-260nw-2145047623.jpg";
+export function lives(livesCount) {
+    // Use local heart image
+    let src = "./assets/heart.png";
 
     let livesContainer = document.querySelector(".lives-container");
     if (!livesContainer) {
@@ -8,38 +9,19 @@ export function lives(lives) {
         document.body.appendChild(livesContainer);
     }
 
-    // drop lifeicon 
-function dropLifeIcon(x, y) {
-    let lifeIcon = new LifeIcon(x, y);
-    lifeIcons.push(lifeIcon);
-  }
-  
-  class LifeIcon {
-    constructor(x, y) {
-      this.x = x;
-      this.y = y;
-      this.speedY = 2;
-    }
+    // Clear existing lives display
+    livesContainer.innerHTML = "";
     
-    update() {
-      this.y += this.speedY; // moveing icon to bootom
+    // Display the current number of lives with enhanced styling
+    for (let i = 0; i < livesCount; i++) {
+        const lifeIcon = document.createElement("img");
+        lifeIcon.src = src;
+        lifeIcon.alt = "Life";
+        lifeIcon.style.width = "40px";
+        lifeIcon.style.height = "40px";
+        lifeIcon.style.margin = "0";
+        lifeIcon.style.display = "block";
+        lifeIcon.style.objectFit = "contain";
+        livesContainer.appendChild(lifeIcon);
     }
-  
-    // sure the icon crush with paddle 
-    checkCollision() {
-      if (
-        paddle.x < this.x + 20 && paddle.x + paddle.width > this.x &&
-        paddle.y < this.y + 20 && paddle.y + paddle.height > this.y
-      ) {
-        
-        lives++;
-        lifeIcons = lifeIcons.filter(icon => icon !== this);  
-      }
-    }
-  
-    draw() {
-      ctx.fillStyle = 'red';
-      ctx.fillRect(this.x, this.y, 20, 20);
-    }
-  }
 }

@@ -18,7 +18,8 @@ export class Brick {
                 if (this.lives === 0) {
                     this.visible = false;
                     if (Math.random() < lifeDropRate) {
-                        dropLifeIcon(this.x, this.y);
+                        // Drop life icon from center of brick
+                        dropLifeIcon(this.x + this.width / 2, this.y + this.height / 2);
                     }
                 }
             }, 1);

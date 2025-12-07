@@ -1,5 +1,7 @@
 import { Dead } from "./dead.js";
 import { paddle } from "./paddle.js";
+import { isGameOver, winGame } from "./end.js";
+import { lifeIcons } from "./lifeicon.js";
 
 export var ball = {
     x: 600 / 2,
@@ -26,11 +28,21 @@ export function startBallMovement() {
 }
 
 export function animate(bricks) {
+    // Stop animation if game is over
+    if (isGameOver()) {
+        return;
+    }
+    
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    console.log(bricks);
     bricks.draw(ctx);
+
+    // Check if all bricks are broken (win condition) - check every frame
+    if (bricks.areAllBricksBroken()) {
+        winGame();
+        return;
+    }
 
     if (!ball.moving) {
         placeBallOnPaddle();
@@ -64,6 +76,29 @@ export function animate(bricks) {
         if (bricks.checkCollision(ball)) {
             // add reward
         }
+    }
+
+    // Update and draw life icons
+    for (let i = lifeIcons.length - 1; i >= 0; i--) {
+        const icon = lifeIcons[i];
+        
+        // Update icon position
+        icon.update();
+        
+        // Check if icon is off screen (remove it)
+        if (icon.y > canvas.height) {
+            lifeIcons.splice(i, 1);
+            continue;
+        }
+        
+        // Check collision with paddle (remove icon if caught)
+        if (icon.checkCollision(paddle)) {
+            lifeIcons.splice(i, 1);
+            continue;
+        }
+        
+        // Draw the icon
+        icon.draw(ctx);
     }
 
     // draw ball

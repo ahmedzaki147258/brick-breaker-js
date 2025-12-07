@@ -9,13 +9,30 @@ export function startPage() {
         startedDiv.style.display = "none";
     }
 
+    // Add game-active class to body and html for full-screen styling
+    document.body.classList.add("game-active");
+    document.documentElement.classList.add("game-active");
+
     // Create canvas if it doesn't exist
     let canvas = document.getElementById("myCanvas");
     if (!canvas) {
         canvas = document.createElement("canvas");
         canvas.id = "myCanvas";
-        canvas.width = 700;
-        canvas.height = 600;
+        
+        // Make canvas larger for better full-screen experience
+        // Use viewport dimensions but maintain aspect ratio
+        const maxWidth = Math.min(window.innerWidth * 0.95, 1200);
+        const maxHeight = Math.min(window.innerHeight * 0.95, 800);
+        const aspectRatio = 700 / 600; // Original aspect ratio
+        
+        if (maxWidth / maxHeight > aspectRatio) {
+            canvas.height = maxHeight;
+            canvas.width = maxHeight * aspectRatio;
+        } else {
+            canvas.width = maxWidth;
+            canvas.height = maxWidth / aspectRatio;
+        }
+        
         document.body.appendChild(canvas);
     }
 

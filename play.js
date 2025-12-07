@@ -6,14 +6,6 @@ import { BricksContainer } from "./scripts/bricks/bricksContainer.js";
 let selectedDifficulty = "easy";
 const difficultyButtons = document.querySelectorAll(".dif");
 
-// difficultyButtons.forEach((button) => {
-//     button.addEventListener("click", () => {
-//         selectedDifficulty = button.getAttribute("data-difficulty");
-//         console.log("Selected difficulty:", selectedDifficulty);
-//     });
-// });
-
-// Add this to your play.js
 difficultyButtons.forEach((button) => {
   button.addEventListener("click", () => {
     // Remove selected class from all buttons
@@ -26,7 +18,9 @@ difficultyButtons.forEach((button) => {
 
 document.getElementById("startGame").addEventListener("click", () => {
   setDifficulty(selectedDifficulty);
-  const bricks = new BricksContainer(selectedDifficulty);
+  // Create canvas first by calling startPage
   startPage();
+  // Now create bricks with canvas dimensions
+  const bricks = new BricksContainer(selectedDifficulty);
   start(bricks);
 });

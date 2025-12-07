@@ -6,13 +6,15 @@ import { gameResult } from "./Score.js";
 export let live = 3;
 
 export function Dead() {
-    if (live == 0) {
-        startPage();
-        endGame();
-        gameResult();
-    }
     live--;
     lives(live);
+    
+    if (live === 0) {
+        // Don't call startPage() - keep the canvas visible
+        // Just show the game over screen
+        endGame();
+        gameResult(false);
+    }
 }
 
 export function revive() {
