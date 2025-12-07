@@ -1,57 +1,43 @@
 export const paddle = {
-  width: 130,
-  height: 12,
-  x: 350,
-  y: 550,
-  color: "transparent",
-  speed: 8,
-  glowIntensity: 0,
-  glowIncreasing: true,
+    width: 100,
+    height: 10,
+    x: 350,
+    y: 550,
+    color: "blue",
+    speed: 8
 };
 
 export function initPaddle(canvas) {
-  paddle.x = (canvas.width - paddle.width) / 2;
-  paddle.y = canvas.height - 50;
+    paddle.x = (canvas.width - paddle.width) / 2;
+    paddle.y = canvas.height - 50;
 }
 
-export function movePaddle(event, canvas) {
-  const rect = canvas.getBoundingClientRect();
-  const mouseX = event.clientX - rect.left;
+let lives = 3;  
+let score = 0;  
+let paddle; 
+let ball;  
+//let bricks = []; 
+let lifeIcons = [];  
+//let unbreakableBricks = [];  
 
-  paddle.x = mouseX - paddle.width / 2;
+// the first game setup    
+/*function setup() {
+//  Create paddle and ball and bricks
+  paddle = new Paddle();
+  ball = new Ball();
+  bricks = createBricks();
+}*/
 
-  if (paddle.x < 0) {
-    paddle.x = 0;
-  } else if (paddle.x + paddle.width > canvas.width) {
-    paddle.x = canvas.width - paddle.width;
+// createnbricks
+/*function createBricks() {
+  let brickArray = [];
+  // create 5 rows and 10 col 
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 10; j++) {
+      let isUnbreakable = Math.random() < 0.2;  // 20% from bricks cant break 
+      brickArray.push(new Brick(j * 60, i * 20, isUnbreakable));
+    }
   }
-}
+  return brickArray;
+}*/
 
-export function drawPaddle(ctx) {
-  ctx.save();
-
- 
-  const gradient = ctx.createLinearGradient(
-    paddle.x,
-    paddle.y,
-    paddle.x + paddle.width,
-    paddle.y + paddle.height
-  );
-
-  
-  gradient.addColorStop(0, "rgba(81, 45, 168, 0.9)");
-  gradient.addColorStop(0.5, "rgba(103, 58, 183, 0.9)");
-  gradient.addColorStop(1, "rgba(123, 31, 162, 0.9)");
-
- 
-  ctx.shadowColor = "rgba(123, 31, 162, 0.6)";
-  ctx.shadowBlur = 15;
-
- 
-  ctx.beginPath();
-  ctx.roundRect(paddle.x, paddle.y, paddle.width, paddle.height, 6);
-  ctx.fillStyle = gradient;
-  ctx.fill();
-
-  ctx.restore();
-}

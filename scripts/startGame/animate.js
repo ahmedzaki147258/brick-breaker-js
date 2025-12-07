@@ -1,129 +1,94 @@
-import { Dead, live } from "./dead.js";
-import { drawPaddle, paddle } from "./paddle.js";
-import { lifeIcons } from "./lifeicon.js";
-import { gameResult } from "./Score.js";
-import { endGame } from "./end.js";
-import { startPage } from "./startedPage.js";
+import { Dead } from "./dead.js";
+import { paddle } from "./paddle.js";
 
 export var ball = {
-  x: 600 / 2,
-  y: 40,
-  color: "transparent",
-  radius: 12,
-  speedX: 2,
-  speedY: 2,
-  moving: false,
-  rotation: 0,
-  glowIntensity: 0,
-  glowIncreasing: true,
+    x: 600 / 2,
+    y: 40,
+    color: "red",
+    radius: 15,
+    speedX: 2,
+    speedY: 2,
+    moving: false,
 };
 
-function drawBall(ctx) {
-  ctx.save();
-
-  const gradient = ctx.createRadialGradient(
-    ball.x,
-    ball.y,
-    0,
-    ball.x,
-    ball.y,
-    ball.radius
-  );
-
-  gradient.addColorStop(0, "rgba(33, 150, 243, 0.95)"); // Light blue
-  gradient.addColorStop(0.6, "rgba(25, 118, 210, 0.95)"); // Medium blue
-  gradient.addColorStop(1, "rgba(13, 71, 161, 0.95)"); // Dark blue
-
-  ctx.shadowColor = "rgba(33, 150, 243, 0.6)";
-  ctx.shadowBlur = 15;
-
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  ctx.fillStyle = gradient;
-  ctx.fill();
-
-  ctx.restore();
-}
-
-export function placeBallOnPaddle() {
-  ball.x = paddle.x + paddle.width / 2;
-  ball.y = paddle.y - ball.radius;
-}
-
-export function startBallMovement() {
-  if (!ball.moving) {
-    ball.moving = true;
-    ball.speedY = -Math.abs(ball.speedY); // go ball to up
-  }
-}
-
-export function animate(bricks) {
-  const canvas = document.getElementById("myCanvas");
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  bricks.draw(ctx);
-  lifeIcons.forEach((icon) => {
-    icon.draw(ctx);
-  });
-
-  if (!ball.moving) {
-    placeBallOnPaddle();
-  } else {
-    bricks.checkCollision(ball);
-
-    if (bricks.areAllBricksBroken()) {
-      startPage();
-      endGame();
-      gameResult(true);
-      return;
-    }
-    lifeIcons.forEach((icon) => icon.checkCollision(paddle));
-    lifeIcons.forEach((icon) => icon.update());
-
-    // collision with wall
-    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
-      ball.speedX = -ball.speedX;
-    }
-    if (ball.y - ball.radius < 0) {
-      ball.speedY = -ball.speedY;
-    }
-
-    // collision with paddle
-    if (
-      ball.y + ball.radius > paddle.y &&
-      ball.x > paddle.x &&
-      ball.x < paddle.x + paddle.width
-    ) {
-      ball.speedY = -ball.speedY;
-    }
-
-    // if the ball hits the top of the canvas
-    if (ball.y + ball.radius > canvas.height) {
-      // lifeIcons = [];
-      if (live == 0) {
-        Dead();
-        return;
-      } else {
-        Dead();
-        ball.moving = false;
-        placeBallOnPaddle();
+hit() {
+    if (this.isUnbreakable) return;  // dont make anything for bricks if isunbreakable 
+    this.hitCount++;
+    if (this.hitCount >= 2) {
+      // call remove function
+      this.remove();
+      // after brack 5 bricks droplife icon 
+      if ( (score + 10 ) % 50 === 0) {
+        dropLifeIcon(this.x, this.y);
       }
     }
-    ball.x += ball.speedX;
-    ball.y += ball.speedY;
   }
 
-  // draw ball
-  drawBall(ctx);
+  // remove bricks
+  remove() {
+    // remove bricks from array
+    const index = bricks.indexOf(this);
+    if (index > -1) {
+      bricks.splice(index, 1);
+      score += 10;  // after breck one of brick increase score to 10 point 
+    }
+  }
+}*/
 
-  // draw paddle
-  //   ctx.beginPath();
-  //   ctx.rect(paddle.x, paddle.y, paddle.width, paddle.height);
-  //   ctx.fillStyle = paddle.color;
-  //   ctx.fill();
-  //   ctx.closePath();
+export function animate(bricks) {
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    console.log(bricks);
+    bricks.draw(ctx);
 
-  drawPaddle(ctx);
+    if (!ball.moving) {
+        placeBallOnPaddle();
+    } else {
+        ball.x += ball.speedX;
+        ball.y += ball.speedY;
 
-  requestAnimationFrame(() => animate(bricks));
+        // collision with wall
+        if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+            ball.speedX = -ball.speedX;
+        }
+        if (ball.y - ball.radius < 0) {
+            ball.speedY = -ball.speedY;
+        }
+
+        // collision with paddle
+        if (
+            ball.y + ball.radius > paddle.y &&
+            ball.x > paddle.x &&
+            ball.x < paddle.x + paddle.width
+        ) {
+            ball.speedY = -ball.speedY;
+        }
+
+        // if the ball hits the top of the canvas
+        if (ball.y + ball.radius > canvas.height) {
+            Dead();
+            ball.moving = false;
+            placeBallOnPaddle();
+        }
+        if (bricks.checkCollision(ball)) {
+            // add reward
+        }
+    }
+
+    // draw ball
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    ctx.fillStyle = ball.color;
+    ctx.fill();
+    ctx.closePath();
+
+    // draw paddle
+    ctx.beginPath();
+    ctx.rect(paddle.x, paddle.y, paddle.width, paddle.height);
+    ctx.fillStyle = paddle.color;
+    ctx.fill();
+    ctx.closePath();
+
+    requestAnimationFrame(() => animate(bricks));
 }
