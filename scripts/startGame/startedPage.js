@@ -1,32 +1,53 @@
 import { startBallMovement } from "./animate.js";
-import { initPaddle, movePaddle } from "./paddle.js";
+import { initPaddle, paddle } from "./paddle.js";
+import { ball } from "./animate.js";
 
-/*function hitBricks() {
-  for (let i = 0; i < bricks.length; i++) {
-    if (ball.collidesWith(bricks[i])) {
-      bricks[i].hit();
+export function startPage() {
+    // Hide the difficulty selection screen
+    const startedDiv = document.getElementById("started");
+    if (startedDiv) {
+        startedDiv.style.display = "none";
     }
-  }
-}*/
 
-function gameLoop() {
-
-    ball.move();
-    paddle.move();
-  
-    //call to Ceack from crush ball with bricks 
-    hitBricks();
-  
-    // cheack from crush icon with paddle 
-    for (let icon of lifeIcons) {
-      icon.checkCollision();
+    // Create canvas if it doesn't exist
+    let canvas = document.getElementById("myCanvas");
+    if (!canvas) {
+        canvas = document.createElement("canvas");
+        canvas.id = "myCanvas";
+        canvas.width = 700;
+        canvas.height = 600;
+        document.body.appendChild(canvas);
     }
-  
-    // update screen
-    draw();
-    requestAnimationFrame(gameLoop);
-  }
-  
-  // start game
-  setup();
-  gameLoop();
+
+    // Initialize paddle position
+    initPaddle(canvas);
+
+    // Set up keyboard controls for paddle
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+            if (paddle.x > 0) {
+                paddle.x -= paddle.speed;
+            }
+        }
+        if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
+            const canvas = document.getElementById("myCanvas");
+            if (canvas && paddle.x + paddle.width < canvas.width) {
+                paddle.x += paddle.speed;
+            }
+        }
+        if (e.key === " " || e.key === "Spacebar") {
+            startBallMovement();
+        }
+    });
+
+    // Set up mouse/touch controls for paddle
+    canvas.addEventListener("mousemove", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        paddle.x = Math.max(0, Math.min(x - paddle.width / 2, canvas.width - paddle.width));
+    });
+
+    canvas.addEventListener("click", () => {
+        startBallMovement();
+    });
+}

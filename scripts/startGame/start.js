@@ -1,11 +1,18 @@
 import { animate } from "./animate.js";
 import { lives } from "./lives.js";
 import { live } from "./dead.js";
+import { initPaddle } from "./paddle.js";
 
-*class Brick {
-    constructor(x, y, isUnbreakable) {
-      this.x = x;
-      this.y = y;
-      this.isUnbreakable = isUnbreakable;
-      this.hitCount = 0;
+export function start(bricks) {
+    // Initialize lives display
+    lives(live);
+    
+    // Initialize canvas and paddle
+    const canvas = document.getElementById("myCanvas");
+    if (canvas) {
+        initPaddle(canvas);
     }
+    
+    // Start the game animation loop
+    animate(bricks);
+}
